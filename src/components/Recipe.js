@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { Link } from 'react-router-dom';
 import Ingredients from './Ingredients';
+import Loader from './Preloader';
 
 const API_KEY = "a53faf17f3fd5cd0dd3a472f5730d839";
 const API_URL = `https://cors-anywhere.herokuapp.com/http://food2fork.com/api/get?key=${API_KEY}&rId=`;
@@ -30,9 +31,9 @@ class Recipe extends Component {
 
         return (
             <div className="container">
-                <br /> <br />
-                {this.state.recipe &&
-                    <div className="active-recipe">
+                {this.state.recipe ?
+                   <div className="active-recipe">
+                   <br/> <br/>
                         <img className="active-recipe__img" src={recipe.image_url} alt={recipe.title} />
                         <h3 className="active-recipe__title"> {recipe.title} </h3>
                         <h4 className="active-active-recipe__publisher">
@@ -48,7 +49,10 @@ class Recipe extends Component {
                         <button className="active-recipe__button">
                             <Link to="/"> GO BACK </Link>
                         </button>
-                    </div>}
+                    </div> :
+                    <div> <Loader /> </div>  
+                }
+
                     <br /> <br />
             </div>
         );

@@ -2,24 +2,74 @@ import React, { Component } from 'react';
 import './App.css';
 import Form from './components/Form';
 import Recipes from './components/Recipes';
+import Loader from './components/Preloader';
 
 const API_KEY = "a53faf17f3fd5cd0dd3a472f5730d839";
 
 class App extends Component {
 
   state = {
-    recipes: []
+    recipes: [],
+    isLoading: false,
+    doOnce: true,
+    isPopular: true,
+    isAlphabetical: false
   }
 
   getRecipe = async (e) => {
+    this.setState({recipes: undefined, isLoading:true});
+
     const recipeName = e.target.elements.recipeName.value;
     e.preventDefault();
     const api_call = await fetch(`https://cors-anywhere.herokuapp.com/http://food2fork.com/api/search?key=${API_KEY}&q=${recipeName}`);
 
     const searchResults = await api_call.json();
-    this.setState({recipes: searchResults.recipes});
+    this.setState({recipes: searchResults.recipes, isLoading:false});
 
-    //console.log(this.state.recipes);
+    console.log(this.state.recipes);
+  }
+
+  getPopularityOrder = async (e) => {
+    e.preventDefault();
+    console.log(`IsPopular: ${this.state.isPopular} IsAlpha: ${this.state.isAlphabetical}`);
+    
+    if(this.state.isPopular === true){
+      return;
+    }
+   
+    let tempRecipes = this.state.recipes;
+    
+    if(tempRecipes === undefined){
+      return;
+    }
+
+    this.setState({ recipes: tempRecipes, isPopular:true, isAlphabetical:false });
+
+    tempRecipes.sort((a, b) => a.social_rank > b.social_rank);
+  }
+
+  getAlphabeticalOrder = async (e) => {
+    e.preventDefault();
+    console.log(`IsPopular: ${this.state.isPopular} IsAlpha: ${this.state.isAlphabetical}`);
+
+    if(this.state.isAlphabetical === true){
+      return;
+    }
+    
+    let tempRecipes = this.state.recipes;
+    
+    if(tempRecipes === undefined){
+      return;
+    }
+
+    this.setState({ recipes: tempRecipes, isPopular:false, isAlphabetical:true });
+
+    tempRecipes.sort((a, b) => {
+      const firstData = a.title;
+      const SeconndData = b.title;
+      
+      return (firstData < SeconndData) ? -1 : (firstData > SeconndData) ? 1 : 0;
+    })
   }
 
 componentDidMount = () => {
@@ -33,16 +83,35 @@ componentDidUpdate = () => {
   localStorage.setItem("recipes", recipes);
 }
 
+loadFirstRecipes = () => {
+  if(this.state.doOnce){
+    this.setState({ doOnce:false });
+    this.getRecipe;
+    return;
+  }
+  return;
+}
+
   render() {
+    const recipes = this.state.recipes;
+    const isPopular = this.state.isPopular;
+    const isAlphabetical = this.state.isAlphabetical;
+
     return (
+    
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Recipe Search</h1>
         </header>
-        <Form getRecipe={this.getRecipe}/>
+        <Form getRecipe={this.getRecipe} 
+        getPopularityOrder={this.getPopularityOrder} isPopular={isPopular}
+        getAlphabeticalOrder={this.getAlphabeticalOrder} isAlphabetical={isAlphabetical}/>
+        { recipes !== undefined ?(
         <Recipes recipes={this.state.recipes}/>
-      </div>
-    );
+       ) :  this.loadFirstRecipes()  }
+        {this.state.isLoading ? <Loader /> : "" }
+        </div>
+       );
   }
 }
 

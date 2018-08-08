@@ -2,11 +2,11 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
-
 const Recipes = props => (
     <div className="container">
 <div className="row">
 {
+    props.recipes[0] ? 
     props.recipes.map((recipe) => {
 
         return (
@@ -32,7 +32,10 @@ const Recipes = props => (
             </div>
                 </div>
         );
-    })
+    }) :
+        <div className="search-failed"> 
+        <h2> Sorry no results were found</h2>
+        </div>
 }
 </div>
     </div>
