@@ -1,3 +1,7 @@
+/*
+ * The Router that controls the multiple webpages 
+ */
+
 import React from 'react';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 

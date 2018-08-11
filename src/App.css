@@ -87,9 +87,14 @@ button:focus {
   padding: 0.4rem;
 }
 
+.form__Container {
+  text-align: center;
+}
+
 .form__button {
-  border: solid 2px #0025fa;
-  background:  #ffffff;
+  display: inline-block;
+  border: solid 2px rgba(0, 37, 250, 1);
+  background: transparent;
   padding: 0.2rem 0.9rem;
   margin: 0 0.2rem;
   border-radius: 1px;
@@ -100,8 +105,8 @@ button:focus {
 }
 
 .form__button-pressed {
-  border: solid 2px #0025fa;
-  background:  #999999;
+  border: solid 2px rgba(0, 37, 250, .5);
+  background:  transparent;
   padding: 0.2rem 0.9rem;
   margin: 0 0.2rem;
   border-radius: 1px;

@@ -1,5 +1,8 @@
-import React from 'react';
+/*
+ * Organises and displays the search results 
+ */
 
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Recipes = props => (
@@ -17,6 +20,8 @@ const Recipes = props => (
                   alt={recipe.title} />
                   <div className="recipe__text">
                     <h5 className = "recipes__title">{ 
+
+                        // Concatenates the string length of the title to keep box sizes even
                         recipe.title.length < 20 ? `${recipe.title}` : `${recipe.title.substring(0, 24)}....`
                         }</h5>
                     <p className = "recipes__subtitle">Publisher: <span> 
@@ -25,6 +30,7 @@ const Recipes = props => (
                    </div>
                    <button className="recipe_buttons">
                    <Link to={{ 
+                       // Creates a path and gives the information for a new recipe webpage
                        pathname: `/recipe/${recipe.recipe_id}`, state:{recipe: recipe.title} 
                        }}>
                         View Recipe </Link>
@@ -33,6 +39,8 @@ const Recipes = props => (
                 </div>
         );
     }) :
+    
+        // When no search reults can be found
         <div className="search-failed"> 
         <h2> Sorry no results were found</h2>
         </div>
